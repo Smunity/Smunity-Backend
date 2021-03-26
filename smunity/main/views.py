@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import JsonResponse
-from .models import User
+from .models import User,Community
 from django.contrib.auth import login, logout,authenticate
 # Create your views here.
 
@@ -37,4 +37,26 @@ def login(request):
         else:
             return JsonResponse(status=400)
     
-        
+def RegisterCommunity(request):
+    if request.method== "POST":
+        name=request.POST.get("name")
+        description=request.POST.get("description")
+        category=request.POST.get("category")
+        category=category.objects.get(name=category)
+        city=reqeust.POST.get("city")
+        country=request.POST.get("country")
+        image=request.POST.get("image")
+        community=Community.objects.create(
+            name=name,
+            description=description,
+            category=category,
+            city=city,
+            country=country,
+            image=image
+        )
+        community.memmbers.add(request.user)
+        community.save()
+        return JsonResponse(status=200)
+# def RegisterCompany(request):
+#     if request.method=="POST":
+#         name=request.POST.get("name")
