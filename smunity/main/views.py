@@ -1,10 +1,11 @@
 from django.shortcuts import render
 from django.http import JsonResponse
-from .models import User,Community
+from .models import User,Community,Company
 from django.contrib.auth import login, logout,authenticate
+from django.views.decorators.csrf import csrf_exempt
 # Create your views here.
-
-def Signup(request):
+@csrf_exempt
+def signup(request):
     if request.method=="POST":
         username=request.POST.get("username")
         email=request.POST.get("email")
@@ -24,8 +25,8 @@ def Signup(request):
         )
         user.set_password(password)
         user.save()
-        return JsonResponse(status=200)
-
+        return HttpResponse(status=200)
+@csrf_exempt
 def login(request):
     if request.method=="POST":
         username=request.POST.get("username")
@@ -35,8 +36,8 @@ def login(request):
             login(request,user)
             return JsonResponse ({"user":username},status=200)
         else:
-            return JsonResponse(status=400)
-    
+            return HttpResponse(status=400)
+@csrf_exempt
 def RegisterCommunity(request):
     if request.method== "POST":
         name=request.POST.get("name")
@@ -56,7 +57,18 @@ def RegisterCommunity(request):
         )
         community.memmbers.add(request.user)
         community.save()
-        return JsonResponse(status=200)
-# def RegisterCompany(request):
-#     if request.method=="POST":
-#         name=request.POST.get("name")
+        return HttpResponse(status=200)
+def RegisterCompany(request):
+    if request.method=="POST":
+        name=request.POST.get("name")
+        description=request.POST.get("description")
+        link=request.POST.get("link")
+        image=request.FILES.get("image")
+        company=Company.objects.get(
+            name=name,
+            description=description,
+            link=link,
+            image=image
+        )
+        return HttpResponse(status=200)
+    return JsonResponse({"message":"Get request not supported"},status=400)

@@ -32,8 +32,8 @@ def upload_smunity_image(instance,filename):
 class User(AbstractUser):
     dob=models.DateField(max_length=8,null=True)
     city= models.CharField(max_length=50)
-    profile_picture=models.ImageField(upload_to=upload_user_image)
-    interest=models.ManyToManyField("Interest")
+    profile_picture=models.ImageField(upload_to=upload_user_image,null=True,blank=True,default="defaultprofile.jpeg")
+    interest=models.ManyToManyField("Interest",null=True,blank=True)
 class Interest(models.Model):
     name=models.CharField(max_length=50)
     description=models.CharField(max_length=500)
@@ -48,31 +48,33 @@ class Community(models.Model):
     description=models.CharField(max_length=500)
     members= models.ManyToManyField(User)
     category=models.ForeignKey("Category",on_delete=models.CASCADE)
-    city=models.CharField(max_length=50,Null=True)
+    city=models.CharField(max_length=50,null=True)
     country= CountryField()
-    image=models.ImageField(upload_to=upload_smunity_image)
+    image=models.ImageField(upload_to=upload_smunity_image,null=True,blank=True)
 
 class Event(models.Model):
     title=models.CharField(max_length=100)
-    agenda=models.CharField(max_length=100)
+    category=models.CharField(max_length=100)
     description=models.CharField(max_length=500)
     organizer=models.ForeignKey(Community,on_delete=models.CASCADE)
     date_created=models.DateTimeField(auto_now=True)
     event_date=models.DateField()
-    tagline=models.CharField(max_length=200)
-    collaborator=models.ManytomanyField(Community)
-    sponsor=models.ManyToManyField("Company")
+    tagline=models.CharField(max_length=200,null=True,blank=True)
+    
+    # collaborator=models.ManyToManyField(Community)
+    # sponsor=models.ManyToManyField("Company")
     MODE_CHOICES=[
         ('phy',"Physical"),
         ('on',"Online")
     ]
     mode=models.CharField(choices=MODE_CHOICES,max_length=3)
     external_link=models.CharField(max_length=100)
+    # speaker=models.ForeignKey(User,null=True,blank=True,on_delete=models.SET_NULL)
+    speaker=models.CharField(max_length=500,null=True)
+    starting_time=models.TimeField(default=None)
 
-class Session(models.Model):
-    name=models.CharField(max_length=100)
-    starting_datetime=models.DateTimeField()
-    speaker=models.ForeignKey(User,on_delete=models.SET_NULL)
-    topic=models.CharField(max_length=100)
-    #time alloted in mins
-    timealloted=models.IntegerField()
+class Company(models.Model):
+    name=models.CharField(max_length=200)
+    description=models.CharField(max_length=500)
+    link=models.CharField(max_length=200,null=True,blank=True)
+    image=models.ImageField(upload_to=upload_smunity_image,null=True,blank=True)
