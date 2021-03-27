@@ -47,8 +47,8 @@ class Community(models.Model):
     name=models.CharField(max_length=100)
     description=models.CharField(max_length=500)
     members= models.ManyToManyField(User)
-    category=models.ForeignKey("Category",on_delete=models.CASCADE)
-    city=models.CharField(max_length=50,Null=True)
+    category=models.ForeignKey(Category,on_delete=models.CASCADE)
+    city=models.CharField(max_length=50,null=True)
     country= CountryField()
     image=models.ImageField(upload_to=upload_smunity_image)
 
@@ -56,12 +56,12 @@ class Event(models.Model):
     title=models.CharField(max_length=100)
     agenda=models.CharField(max_length=100)
     description=models.CharField(max_length=500)
-    organizer=models.ForeignKey(Community,on_delete=models.CASCADE)
+    organizer=models.ManyToManyField(Community)
     date_created=models.DateTimeField(auto_now=True)
     event_date=models.DateField()
     tagline=models.CharField(max_length=200)
-    collaborator=models.ManytomanyField(Community)
-    sponsor=models.ManyToManyField("Company")
+    #collaborator=models.ManyToManyField(Community)
+    #sponsor=models.ManyToManyField("Company")
     MODE_CHOICES=[
         ('phy',"Physical"),
         ('on',"Online")
@@ -72,7 +72,7 @@ class Event(models.Model):
 class Session(models.Model):
     name=models.CharField(max_length=100)
     starting_datetime=models.DateTimeField()
-    speaker=models.ForeignKey(User,on_delete=models.SET_NULL)
+    speaker=models.ForeignKey(User,null=True,on_delete=models.SET_NULL)
     topic=models.CharField(max_length=100)
     #time alloted in mins
     timealloted=models.IntegerField()

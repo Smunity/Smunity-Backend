@@ -4,7 +4,7 @@ from .models import User,Community
 from django.contrib.auth import login, logout,authenticate
 # Create your views here.
 
-def Signup(request):
+def signup(request):
     if request.method=="POST":
         username=request.POST.get("username")
         email=request.POST.get("email")
