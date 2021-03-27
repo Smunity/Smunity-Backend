@@ -72,3 +72,4 @@ def RegisterCompany(request):
         )
         return HttpResponse(status=200)
     return JsonResponse({"message":"Get request not supported"},status=400)
+
