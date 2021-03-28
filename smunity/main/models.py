@@ -42,6 +42,8 @@ class Interest(models.Model):
 class Category(models.Model):
     name=models.CharField(max_length=50)
     description=models.CharField(max_length=500)
+    def __str__(self):
+        return self.name
 
 class Community(models.Model):
     name=models.CharField(max_length=100)
@@ -51,6 +53,8 @@ class Community(models.Model):
     city=models.CharField(max_length=50,null=True)
     country= CountryField()
     image=models.ImageField(upload_to=upload_smunity_image,null=True,blank=True)
+    def __str__(self):
+        return self.name
 
 class Event(models.Model):
     title=models.CharField(max_length=100)

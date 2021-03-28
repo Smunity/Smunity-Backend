@@ -3,6 +3,14 @@ from django.http import JsonResponse,HttpResponse
 from .models import User,Community,Company
 from django.contrib.auth import login, logout,authenticate
 from django.views.decorators.csrf import csrf_exempt
+from .models import Event
+
+from .serializers import EventSerializer
+from django.http import Http404
+from rest_framework.views import APIView
+from rest_framework import generics
+from rest_framework.response import Response
+from rest_framework import status
 # Create your views here.
 @csrf_exempt
 def signup(request):
@@ -76,4 +84,9 @@ def RegisterCompany(request):
         )
         return HttpResponse(status=200)
     return JsonResponse({"message":"Get request not supported"},status=400)
+
+
+class EventList(generics.ListCreateAPIView): # for just GET request
+    queryset = Event.objects.all()
+    serializer_class = EventSerializer
 
