@@ -5,7 +5,7 @@ from django.contrib.auth import login, logout,authenticate
 from django.views.decorators.csrf import csrf_exempt
 from .models import Event
 
-from .serializers import EventSerializer
+from .serializers import EventSerializer,CommunitySerializer
 from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework import generics
@@ -86,7 +86,11 @@ def RegisterCompany(request):
     return JsonResponse({"message":"Get request not supported"},status=400)
 
 
-class EventList(generics.ListCreateAPIView): # for just GET request
+class EventList(generics.ListCreateAPIView): # for just GET POST request
     queryset = Event.objects.all()
     serializer_class = EventSerializer
+
+class CommunityList(generics.ListCreateAPIView): # for just GET POST request
+    queryset = Community.objects.all()
+    serializer_class = CommunitySerializer
 

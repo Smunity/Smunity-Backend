@@ -5,5 +5,6 @@ urlpatterns=[
     path('signup/',views.signup,name="signup"),
     path('login/',views.Login,name="login"),
     path('events/',views.EventList.as_view()),
+    path('community/',views.CommunityList.as_view()),
 ]
 urlpatterns = format_suffix_patterns(urlpatterns)
