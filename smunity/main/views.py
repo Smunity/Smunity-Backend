@@ -70,6 +70,16 @@ def RegisterCommunity(request):
         community.memmbers.add(request.user)
         community.save()
         return HttpResponse(status=200)
+
+def RegisterInterests(request):
+    if request.methods=="POST":
+        interests=eval(request.POST.get("interests"))
+        user=request.user
+        for interest in interests:
+            user.interest.add(interest)
+        user.save()
+        return HttpResponse(status=201)
+
 def RegisterCompany(request):
     if request.method=="POST":
         name=request.POST.get("name")
@@ -111,7 +121,7 @@ def RegisterEvent(request):
         )
         event.organizer.add(organizer)
         event.save()
-
+        return HttpResponse(status=201)
 
 
 
