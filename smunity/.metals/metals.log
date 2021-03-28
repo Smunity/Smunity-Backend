@@ -3,3 +3,7 @@
 [0m2021.03.28 00:53:43 WARN  Build server is not auto-connectable.[0m
 [0m2021.03.28 00:53:43 WARN  no build tool detected in workspace 'G:\Smunity\Smunity-Backend\smunity'. The most common cause for this problem is that the editor was opened in the wrong working directory, for example if you use sbt then the workspace directory should contain build.sbt. [0m
 [0m2021.03.28 05:43:16 INFO  shutting down Metals[0m
+[0m2021.03.28 16:46:39 INFO  Started: Metals version 0.10.0 in workspace 'G:\Smunity\Smunity-Backend\smunity' for client vscode 1.54.3.[0m
+[0m2021.03.28 16:46:43 INFO  time: initialize in 4.47s[0m
+[0m2021.03.28 16:46:47 WARN  Build server is not auto-connectable.[0m
+[0m2021.03.28 16:46:47 WARN  no build tool detected in workspace 'G:\Smunity\Smunity-Backend\smunity'. The most common cause for this problem is that the editor was opened in the wrong working directory, for example if you use sbt then the workspace directory should contain build.sbt. [0m
