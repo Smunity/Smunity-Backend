@@ -1,10 +1,8 @@
 from django.shortcuts import render
 from django.http import JsonResponse,HttpResponse
-from .models import User,Community,Company
+from .models import User,Community,Company,Event,Interest
 from django.contrib.auth import login, logout,authenticate
 from django.views.decorators.csrf import csrf_exempt
-from .models import Event
-
 from .serializers import EventSerializer,CommunitySerializer
 from django.http import Http404
 from rest_framework.views import APIView
@@ -75,7 +73,8 @@ def RegisterInterests(request):
     if request.methods=="POST":
         interests=eval(request.POST.get("interests"))
         user=request.user
-        for interest in interests:
+        for i in interests:
+            interest= Interest.objects.get(name=i)
             user.interest.add(interest)
         user.save()
         return HttpResponse(status=201)
