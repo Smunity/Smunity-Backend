@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import JsonResponse
+from django.http import JsonResponse,HttpResponse
 from .models import User,Community,Company
 from django.contrib.auth import login, logout,authenticate
 from django.views.decorators.csrf import csrf_exempt
@@ -13,6 +13,7 @@ def signup(request):
         last_name=request.POST.get("lastname")
         dob=request.POST.get("dob")
         city= request.POST.get("city")
+        password=request.POST.get("password")
         profile_picture=request.FILES.get("profile_picture")
         user=User.objects.create(
             username=username,
@@ -21,16 +22,19 @@ def signup(request):
             email=email,
             dob=dob,
             city=city,
-            profile_picture=profile_picture
+            
         )
+        if profile_picture!= None:
+            user.profile_picture=profile_picture
         user.set_password(password)
         user.save()
         return HttpResponse(status=200)
 @csrf_exempt
-def login(request):
+def Login(request):
     if request.method=="POST":
         username=request.POST.get("username")
         password=request.POST.get("password")
+        
         user=authenticate(request,username=username,password=password)
         if user is not None:
             login(request,user)
