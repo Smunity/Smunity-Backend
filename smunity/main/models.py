@@ -33,11 +33,10 @@ class User(AbstractUser):
     dob=models.DateField(max_length=8,null=True)
     city= models.CharField(max_length=50)
     profile_picture=models.ImageField(upload_to=upload_user_image,null=True,blank=True,default="defaultprofile.jpg")
-    interest=models.ManyToManyField("Interest",blank=True)
+    interest=models.ManyToManyField("Interest",null=True)
 class Interest(models.Model):
     name=models.CharField(max_length=50)
-    #description=models.CharField(max_length=500)
-    #image=models.ImageField(upload_to='interests/')
+    
     def __str__(self):
         return self.name
 

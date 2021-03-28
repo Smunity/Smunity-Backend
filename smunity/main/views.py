@@ -128,7 +128,13 @@ class EventList(generics.ListCreateAPIView): # for just GET POST request
     queryset = Event.objects.all()
     serializer_class = EventSerializer
 
+
 class CommunityList(generics.ListCreateAPIView): # for just GET POST request
     queryset = Community.objects.all()
     serializer_class = CommunitySerializer
+
+class CommunityDetails(generics.RetrieveUpdateDestroyAPIView): # for just GET POST request
+    queryset = Community.objects.all()
+    serializer_class = CommunitySerializer
+    
 
