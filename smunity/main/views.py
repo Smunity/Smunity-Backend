@@ -97,7 +97,20 @@ def RegisterEvent(request):
         link=request.POST.get("link")
         speaker=request.POST.get("speaker")        
         starting_time=request.POST.get("startingtime")
-
+        event=Event.objects.create(
+            title=title,
+            description=description,
+            category=category,
+            
+            event_date=event_date,
+            tagline=tagline,
+            mode=mode,
+            external_link=link,
+            speaker=speaker,
+            starting_time=starting_time
+        )
+        event.organizer.add(organizer)
+        event.save()
 
 
 
