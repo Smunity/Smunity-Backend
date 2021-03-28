@@ -46,6 +46,13 @@ class Category(models.Model):
     description=models.CharField(max_length=500)
     def __str__(self):
         return self.name
+# class CommunityManager(models.Manager):
+#     # def by_user(self,user):
+#     def by_user(self, user):
+#         qlookup = Q(user1=user) | Q(user2=user)
+#         qlookup2 = Q(user1=user) & Q(user2=user)
+#         qs = self.get_queryset().filter(qlookup).exclude(qlookup2).distinct()
+#         return qs
 
 class Community(models.Model):
     name=models.CharField(max_length=100)
@@ -55,6 +62,7 @@ class Community(models.Model):
     city=models.CharField(max_length=50,null=True)
     country= CountryField()
     image=models.ImageField(upload_to=upload_smunity_image,null=True,blank=True)
+    # objects=CommunityManager
     def __str__(self):
         return self.name
 

@@ -85,6 +85,22 @@ def RegisterCompany(request):
         return HttpResponse(status=200)
     return JsonResponse({"message":"Get request not supported"},status=400)
 
+def RegisterEvent(request):
+    if request.method == "POST":
+        title=request.POST.get("title")
+        category=request.POST.get("category")
+        description=request.POST.get("description")
+        organizer=Community.objects.get(members= reqeust.user)
+        event_date= request.POST.get("date")
+        tagline=request.POST.get("tagline")
+        mode=request.POST.get("mode")
+        link=request.POST.get("link")
+        speaker=request.POST.get("speaker")        
+        starting_time=request.POST.get("startingtime")
+
+
+
+
 
 class EventList(generics.ListCreateAPIView): # for just GET POST request
     queryset = Event.objects.all()
