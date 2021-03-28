@@ -1,1 +1,4 @@
 venv/
+smunity/smunity/__pycache__/
+smunity/main/__pycache__/
+smunity/main/migrations/

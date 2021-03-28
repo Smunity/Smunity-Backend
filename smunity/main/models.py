@@ -56,7 +56,7 @@ class Event(models.Model):
     title=models.CharField(max_length=100)
     category=models.CharField(max_length=100)
     description=models.CharField(max_length=500)
-    organizer=models.ForeignKey(Community,on_delete=models.CASCADE)
+    organizer=models.ManyToManyField(Community)
     date_created=models.DateTimeField(auto_now=True)
     event_date=models.DateField()
     tagline=models.CharField(max_length=200,null=True,blank=True)
