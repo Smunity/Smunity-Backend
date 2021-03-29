@@ -3,6 +3,9 @@ from django.contrib.auth.models import AbstractUser
 import os
 from django.conf import settings
 from django_countries.fields import CountryField
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
 # Create your models here.
 
 
@@ -86,8 +89,24 @@ class Event(models.Model):
     speaker=models.CharField(max_length=500,null=True)
     starting_time=models.TimeField(default=None)
 
+@receiver(post_save,sender=Event)
+def event_handler(sender,instance,created,*args,**kwargs):
+    if len(instance.organizer.all()) >0:    
+        notification=Notification.objects.create(
+            created_by=instance.organizer.all()[0],
+            event=instance,
+            text=f"{instance.organizer.all()[0]} Created {instance.title}"
+        )    
 class Company(models.Model):
     name=models.CharField(max_length=200)
     description=models.CharField(max_length=500)
     link=models.CharField(max_length=200,null=True,blank=True)
     image=models.ImageField(upload_to=upload_smunity_image,null=True,blank=True)
+
+class Notification(models.Model):
+    created_by=models.ForeignKey(Community,on_delete=models.CASCADE)
+    event= models.ForeignKey(Event,on_delete=models.CASCADE)
+    text=models.CharField(max_length=500)
+    
+    def __str__(self):
+        return self.text

@@ -1,9 +1,9 @@
 from django.shortcuts import render
 from django.http import JsonResponse,HttpResponse
-from .models import User,Community,Company,Event,Interest
+from .models import User,Community,Company,Event,Interest,Notification
 from django.contrib.auth import login, logout,authenticate
 from django.views.decorators.csrf import csrf_exempt
-from .serializers import EventSerializer,CommunitySerializer
+from .serializers import EventSerializer,CommunitySerializer,NotificationSerializer
 from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework import generics
@@ -94,13 +94,14 @@ def RegisterCompany(request):
         )
         return HttpResponse(status=200)
     return JsonResponse({"message":"Get request not supported"},status=400)
-
+@csrf_exempt
 def RegisterEvent(request):
     if request.method == "POST":
         title=request.POST.get("title")
         category=request.POST.get("category")
         description=request.POST.get("description")
-        organizer=Community.objects.get(members= reqeust.user)
+        organizer_comm=Community.objects.get(members= request.user)
+        print(organizer_comm)
         event_date= request.POST.get("date")
         tagline=request.POST.get("tagline")
         mode=request.POST.get("mode")
@@ -119,8 +120,14 @@ def RegisterEvent(request):
             speaker=speaker,
             starting_time=starting_time
         )
-        event.organizer.add(organizer)
+        event.organizer.add(organizer_comm)
         event.save()
+       
+        # notification=Notification.objects.create(
+        # created_by=event.organizer.all()[0],
+        # event=event,
+        # text=f"{event.organizer.all()[0]} Created {event.title}"
+        # )
         return HttpResponse(status=201)
 
 @csrf_exempt
@@ -131,15 +138,18 @@ def Search(request):
         search_keywords=search.split(" ")
         # communities=Community.objects.filter(name___in=search_keywords)        
         communities=[]
+        
         for word in search_keywords:
-            if Filter ==None:
+            if Filter =="":
                 communities_search=Community.objects.filter(name__contains=word)
             else:
-                communities_search=Community.objects.filter(city__contains=word)
+                communities_search=Community.objects.filter(Q(city__contains=Filter) & Q(name__contains=word))
             for community in communities_search:
                 communities.append(community)
         communities_data=CommunitySerializer(communities,many=True).data
         return JsonResponse({"communities":communities_data},status=201)
+
+
 class EventList(generics.ListCreateAPIView): # for just GET POST request
     queryset = Event.objects.all()
     serializer_class = EventSerializer
@@ -152,5 +162,8 @@ class CommunityList(generics.ListCreateAPIView): # for just GET POST request
 class CommunityDetails(generics.RetrieveUpdateDestroyAPIView): # for just GET POST request
     queryset = Community.objects.all()
     serializer_class = CommunitySerializer
-    
+
+class NotificationList(generics.ListCreateAPIView): # for just GET POST request
+    queryset = Notification.objects.all()
+    serializer_class = NotificationSerializer
 

@@ -7,7 +7,9 @@ urlpatterns=[
     path('events/',views.EventList.as_view()),
      path('community/',views.CommunityList.as_view()),
     path('community/<str:city>/',views.CommunityDetails.as_view()),
+    path('notification/',views.NotificationList.as_view()),
     path("create-event/",views.RegisterEvent,name="RegisterEvent"),
-    path("search/",views.Search,name="Search")
+    path("search/",views.Search,name="Search"),
+    
 ]
 urlpatterns = format_suffix_patterns(urlpatterns)
