@@ -9,6 +9,7 @@ from rest_framework.views import APIView
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework import status
+from django.db.models import Q
 # Create your views here.
 @csrf_exempt
 def signup(request):
@@ -122,8 +123,23 @@ def RegisterEvent(request):
         event.save()
         return HttpResponse(status=201)
 
-
-
+@csrf_exempt
+def Search(request):
+    if request.method=="POST":
+        Filter=request.POST.get("filter")
+        search=request.POST.get("search")
+        search_keywords=search.split(" ")
+        # communities=Community.objects.filter(name___in=search_keywords)        
+        communities=[]
+        for word in search_keywords:
+            if Filter ==None:
+                communities_search=Community.objects.filter(name__contains=word)
+            else:
+                communities_search=Community.objects.filter(city__contains=word)
+            for community in communities_search:
+                communities.append(community)
+        communities_data=CommunitySerializer(communities,many=True).data
+        return JsonResponse({"communities":communities_data},status=201)
 class EventList(generics.ListCreateAPIView): # for just GET POST request
     queryset = Event.objects.all()
     serializer_class = EventSerializer
