@@ -88,6 +88,8 @@ class Event(models.Model):
     # speaker=models.ForeignKey(User,null=True,blank=True,on_delete=models.SET_NULL)
     speaker=models.CharField(max_length=500,null=True)
     starting_time=models.TimeField(default=None)
+    def __str__(self):
+        return self.title
 
 @receiver(post_save,sender=Event)
 def event_handler(sender,instance,created,*args,**kwargs):

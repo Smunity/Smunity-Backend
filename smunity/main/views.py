@@ -10,6 +10,8 @@ from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework import status
 from django.db.models import Q
+
+import json
 # Create your views here.
 @csrf_exempt
 def signup(request):
@@ -38,9 +40,20 @@ def signup(request):
         return HttpResponse(status=200)
 @csrf_exempt
 def Login(request):
+    
+
     if request.method=="POST":
-        username=request.POST.get("username")
-        password=request.POST.get("password")
+        #username=request.POST.get("username")
+        #password=request.POST.get("password")
+        try:
+            data = json.loads(request.body)
+            print(data['username'],data['password'],'lokkkk')
+            username = data['username']
+            password = data['password']
+        except:
+            username=request.POST.get("username")
+            password=request.POST.get("password")           
+
         print(username,password)
         
         user=authenticate(request,username=username,password=password)
@@ -98,17 +111,33 @@ def RegisterCompany(request):
 @csrf_exempt
 def RegisterEvent(request):
     if request.method == "POST":
-        title=request.POST.get("title")
-        category=request.POST.get("category")
-        description=request.POST.get("description")
-        organizer_comm=Community.objects.get(members= request.user)
-        print(organizer_comm)
-        event_date= request.POST.get("date")
-        tagline=request.POST.get("tagline")
-        mode=request.POST.get("mode")
-        link=request.POST.get("link")
-        speaker=request.POST.get("speaker")        
-        starting_time=request.POST.get("startingtime")
+        try:
+            data = json.loads(request.body)
+            print(data["title"],"hello events")
+           
+            title=data["title"]
+            category=data["category"]
+            description=data["description"]
+            organizer_comm=Community.objects.get(members= request.user)
+            print(organizer_comm,"event organizer")
+            event_date= data["date"]
+            tagline=data["tagline"]
+            mode=data["mode"]
+            link=data["link"]
+            speaker=data["speaker"]       
+            starting_time=data["startingtime"]
+        except:
+            title=request.POST.get("title")
+            category=request.POST.get("category")
+            description=request.POST.get("description")
+            organizer_comm=Community.objects.get(members= request.user)
+            print(organizer_comm,"event organizer")
+            event_date= request.POST.get("date")
+            tagline=request.POST.get("tagline")
+            mode=request.POST.get("mode")
+            link=request.POST.get("link")
+            speaker=request.POST.get("speaker")        
+            starting_time=request.POST.get("startingtime")
         event=Event.objects.create(
             title=title,
             description=description,
