@@ -10,7 +10,7 @@ from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework import status
 from django.db.models import Q
-
+from django.contrib.auth.decorators import login_required
 import json
 # Create your views here.
 @csrf_exempt
@@ -109,9 +109,12 @@ def RegisterCompany(request):
         return HttpResponse(status=200)
     return JsonResponse({"message":"Get request not supported"},status=400)
 @csrf_exempt
+
 def RegisterEvent(request):
     if request.method == "POST":
+        print("postedd")
         try:
+            print("postedd 1")
             data = json.loads(request.body)
             print(data["title"],"hello events")
            
@@ -127,6 +130,7 @@ def RegisterEvent(request):
             speaker=data["speaker"]       
             starting_time=data["startingtime"]
         except:
+            print("postedd 2")
             title=request.POST.get("title")
             category=request.POST.get("category")
             description=request.POST.get("description")
@@ -187,6 +191,7 @@ class EventList(generics.ListCreateAPIView): # for just GET POST request
 
 class CommunityList(generics.ListCreateAPIView): # for just GET POST request
     queryset = Community.objects.all()
+    print(queryset,"queryset")
     serializer_class = CommunitySerializer
 
 class CommunityDetails(generics.RetrieveUpdateDestroyAPIView): # for just GET POST request
